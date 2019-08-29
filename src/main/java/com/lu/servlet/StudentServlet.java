@@ -24,14 +24,16 @@ public class StudentServlet extends BaseServlet{
 	
 	}
 	/**
-	  *  用户注册
+	 * 用户注册
 	 * @param req
 	 * @param resp
 	 * @throws UnsupportedEncodingException 
 	 */
 	public void regist(HttpServletRequest req,HttpServletResponse resp) throws UnsupportedEncodingException {
-		req.setCharacterEncoding("utf-8");
-		Student student = MyBeanUtils.populate(Student.class, req.getParameterMap());
-		System.out.println(student);
+		//封装学生数据
+		Student s = MyBeanUtils.populate(Student.class, req.getParameterMap());
+		//验证不为空
+		System.out.println(MyBeanUtils.isNUll(s.getBirthday(),s.getMess(),s.getPassword()));
+		System.out.println(s);
 	}
 }

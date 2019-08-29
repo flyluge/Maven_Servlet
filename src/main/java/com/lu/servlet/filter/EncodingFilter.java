@@ -15,9 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
-  *  通用的编码过滤器
+ * 通用的编码过滤器
  * @author Luge
- *
  */
 public class EncodingFilter implements Filter {
     // 默认设置过滤器使用的编码为utf-8
@@ -38,7 +37,6 @@ public class EncodingFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-    	System.out.println("开始过滤请求数据的编码……");
     	// 转型为与协议相关对象
         HttpServletRequest req = (HttpServletRequest) request;
         // 获取请求方法
@@ -56,7 +54,7 @@ public class EncodingFilter implements Filter {
     }
 }
 /**
- * get请求的解决方式
+ * get请求乱码的解决方式
  * @author Luge
  *
  */
@@ -90,6 +88,16 @@ class EncodingRequest extends HttpServletRequestWrapper {
     @Override
     public String[] getParameterValues(String name) {
         String[] values = map.get(name);
+        if(values != null && values.length > 0){
+            for (int i = 0; i < values.length; i++) {
+                try {
+                    // values是一个地址
+                    values[i] = new String(values[i].getBytes("ISO-8859-1"), charsetName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return values;
     }
     @Override

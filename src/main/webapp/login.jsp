@@ -7,6 +7,7 @@
 <title>登陆界面</title>
 </head>
 <body>
+${pageContext.request.contextPath}
 <form action="" method="post">
 		<table>
 			<tr>
