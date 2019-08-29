@@ -25,16 +25,22 @@ public class BaseServlet extends HttpServlet{
 	  *  解析请求 ,获取要调用的method方法,并调用
 	 */
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//获取method
-		String method=req.getParameter("method");
-		//若method不存在 调用将method赋值为默认方法
 		try {
+			//获取method
+			String method=req.getParameter("method");
 			Class<? extends BaseServlet> clazz = this.getClass();
+			//若method不存在 调用将method赋值为默认方法
 			if(method==null||method.trim().equals("")) {
 				method="defaultMethod";
 			}
 			//调用方法
-			Method m1 = clazz.getMethod(method, HttpServletRequest.class,HttpServletResponse.class);
+			Method m1=null;
+			try {
+				m1 = clazz.getMethod(method, HttpServletRequest.class,HttpServletResponse.class);
+			} catch (NoSuchMethodException e) {
+				method="defaultMethod";
+				m1 = clazz.getMethod(method, HttpServletRequest.class,HttpServletResponse.class);
+			}
 			//执行方法并获取url
 			String url=(String) m1.invoke(clazz.newInstance(),req, resp);
 			if(url!=null) {
@@ -42,7 +48,7 @@ public class BaseServlet extends HttpServlet{
 			}else {
 				
 			}
-		} catch (Exception e) {
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
