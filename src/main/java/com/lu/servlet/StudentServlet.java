@@ -29,11 +29,16 @@ public class StudentServlet extends BaseServlet{
 	 * @param resp
 	 * @throws UnsupportedEncodingException 
 	 */
-	public void regist(HttpServletRequest req,HttpServletResponse resp) throws UnsupportedEncodingException {
+	public String regist(HttpServletRequest req,HttpServletResponse resp) throws UnsupportedEncodingException {
 		//封装学生数据
+		System.out.println("2222");
 		Student s = MyBeanUtils.populate(Student.class, req.getParameterMap());
 		//验证不为空
-		System.out.println(MyBeanUtils.isNUll(s.getBirthday(),s.getMess(),s.getPassword()));
-		System.out.println(s);
+		if(!MyBeanUtils.isNUll(s.getStuid(),s.getPassword(),s.getStuname(),s.getSex(),s.getBirthday(),s.getMess())) {
+			this.write(false, "数据不能存在空值", resp);
+			return null;
+		}else {
+			return "html/login.html";
+		}
 	}
 }

@@ -23,19 +23,14 @@ public class MyDateConverter implements Converter{
 	 */
 	public Object convert(@SuppressWarnings("rawtypes") Class type, Object value){  
         if(value == null||value.toString().trim().length()==0){  
-        	System.out.println("输出了");
             return null;  
         }else if(type == Timestamp.class){  
-        	System.out.println("date输出了");
             return convertToDate(type, value, "yyyy-MM-dd HH:mm:ss"); 
         }else if(type == java.util.Date.class){ 
-        	System.out.println("date输出了");
             return convertToDate(type, value, "yyyy-MM-dd");  
         }else if(type == java.sql.Date.class) {
-        	System.out.println("date输出了");
         	return convertToDate(type, value, "yyyy-MM-dd");  
         }else if(type == String.class){ 
-        	System.out.println("date输出了");
             return convertToString(type, value);  
         }  
         throw new ConversionException("不能转换 " + value.getClass().getName() + " 为 " + type.getName());  
@@ -93,5 +88,5 @@ public class MyDateConverter implements Converter{
         }else{  
             return value.toString();  
         }  
-    }  
+    } 
 }  
