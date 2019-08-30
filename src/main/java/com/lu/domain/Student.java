@@ -10,36 +10,11 @@ public class Student {
 	private String mess;//信息
 	private String password;//密码
 	private Date birthday;
-	private Integer testint;
-	private Double testdouble;
-	private Float testfloat;
-	
-	public Integer getTestint() {
-		return testint;
-	}
-	public void setTestint(Integer testint) {
-		this.testint = testint;
-	}
-	public Double getTestdouble() {
-		return testdouble;
-	}
-	public void setTestdouble(Double testdouble) {
-		this.testdouble = testdouble;
-	}
-	public Float getTestfloat() {
-		return testfloat;
-	}
-	public void setTestfloat(Float testfloat) {
-		this.testfloat = testfloat;
+	public Integer getId() {
+		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public Date getBirthday() {
-		return birthday;
-	}
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
 	}
 	public String getStuid() {
 		return stuid;
@@ -65,19 +40,21 @@ public class Student {
 	public void setMess(String mess) {
 		this.mess = mess;
 	}
-	
 	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public Date getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
 	@Override
 	public String toString() {
 		return "Student [id=" + id + ", stuid=" + stuid + ", stuname=" + stuname + ", sex=" + sex + ", mess=" + mess
-				+ ", password=" + password + ", birthday=" + birthday + ", testint=" + testint + ", testdouble="
-				+ testdouble + ", testfloat=" + testfloat + "]";
+				+ ", password=" + password + ", birthday=" + birthday + "]";
 	}
-	
-	
 }

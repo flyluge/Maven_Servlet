@@ -6,7 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Properties;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import javax.sql.DataSource;
+
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
 /**
@@ -15,8 +16,22 @@ import com.alibaba.druid.pool.DruidDataSourceFactory;
  *
  */
 public class JDBCUtils {
+	private static DataSource dataSource;
 	/**
-	  *  普通方式获取链接
+	 * 初始化数据源
+	 */
+	static {
+		try {
+			System.out.println("执行了");
+			Properties properties =new Properties();
+			properties.load(JDBCUtils.class.getClassLoader().getResourceAsStream("jdbc.properties"));
+			dataSource=DruidDataSourceFactory.createDataSource(properties);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 *  普通方式获取链接
 	 * @return Connection对象
 	 */
 	public static Connection getConnection() {
@@ -67,8 +82,8 @@ public class JDBCUtils {
 	public static Connection getDruidConnection() {
 		try {
 			//创建并配置数据源
-			Properties p=new Properties();
-			p.load(JDBCUtils.class.getClassLoader().getResourceAsStream("jdbc.properties"));
+			//Properties p=new Properties();
+			//p.load(JDBCUtils.class.getClassLoader().getResourceAsStream("jdbc.properties"));
 			/*
 			 *  //手写方式
 			 * DruidDataSource dds=new DruidDataSource(); dds.setUrl(p.getProperty("url"));
@@ -77,12 +92,19 @@ public class JDBCUtils {
 			 * dds.setDriverClassName(p.getProperty("driverClassName"));
 			 */
 			//调用配置文件方式
-			DruidDataSource dds=(DruidDataSource) DruidDataSourceFactory.createDataSource(p);
-			dds.setInitialSize(5);//初始化池子大小
-			return dds.getConnection();
+			//DruidDataSource dds=(DruidDataSource) DruidDataSourceFactory.createDataSource(p);
+			//dds.setInitialSize(5);//初始化池子大小
+			return dataSource.getConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	/**
+	 * 获取数据源 
+	 * @return DataSource数据源对象
+	 */
+	public static DataSource getDataSource() {
+		return dataSource;
 	}
 }

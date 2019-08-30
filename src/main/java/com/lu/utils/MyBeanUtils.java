@@ -60,17 +60,5 @@ public class MyBeanUtils {
 			throw new RuntimeException(e);
 		}		
 	}
-	/**
-	 * 判断Obj数组中是否有空值或空串
-	 * @param obj 需要验证的对象数组
-	 * @return true:全部非空  false:存在空值或空串
-	 */
-	public static boolean isNUll(Object... obj) {
-		for (Object object : obj) {
-			if(object==null||object.toString().trim().length()==0) {
-				return false;
-			}
-		}
-		return true;
-	}
+
 }

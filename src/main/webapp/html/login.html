@@ -3,13 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <title>学生登陆</title>
+<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
 </head>
+<script type="text/javascript">
+	$(function(){
+		$("#form_but_submit").click(function(){
+			var jsondata=$("#form_login").serialize();
+			$.ajax({
+				type:"post",
+				url:"/Maven_Servlet_Day01/StudentServlet?method=login",
+				data:jsondata,
+				dataType:"json",
+				success:function(data){
+					if(data.message){
+						window.location.href="NewFile.html";
+					}else{
+						alert(data.data);
+					}
+				}
+			})
+		})
+	})
+</script>
 <body>
-	<form action="" method="post">
+	<form id="form_login">
 		<table>
 			<tr>
-				<td><label>账号</label></td>
-				<td><input type="text" name="account" placeholder="请输入账号">
+				<td><label>学号</label></td>
+				<td><input type="text" name="stuid" placeholder="请输入账号">
 				</td>
 			</tr>
 			<tr>
@@ -18,7 +39,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="提交"></td>
+				<td><input id="form_but_submit" type="button" value="提交"></td>
 				<td><input type="reset" value="重置"></td>
 			</tr>
 		</table>
