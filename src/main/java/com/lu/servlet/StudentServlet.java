@@ -57,7 +57,7 @@ public class StudentServlet extends BaseServlet{
 		Student s = MyBeanUtils.populate(Student.class, req.getParameterMap());
 		System.out.println(s);
 		//验证不为空
-		if(!FormValidation.isNUll(s.getStuid(),s.getPassword(),s.getStuname(),s.getSex(),s.getBirthday(),s.getMess())) {
+		if(!FormValidation.isNUll(s.getStuid(),s.getPassword(),s.getStuname(),s.getSex(),s.getBirthday(),s.getMessage())) {
 			this.write(false, "数据不能存在空值", resp);
 			return;
 		}else {

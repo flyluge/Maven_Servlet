@@ -7,7 +7,7 @@ public class Student {
 	private String stuid;//学生id
 	private String stuname;//学生姓名
 	private String sex;//性别 男/女
-	private String mess;//信息
+	private String message;//信息
 	private String password;//密码
 	private Date birthday;
 	public Integer getId() {
@@ -34,11 +34,12 @@ public class Student {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	public String getMess() {
-		return mess;
+	
+	public String getMessage() {
+		return message;
 	}
-	public void setMess(String mess) {
-		this.mess = mess;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	public String getPassword() {
 		return password;
@@ -54,7 +55,7 @@ public class Student {
 	}
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", stuid=" + stuid + ", stuname=" + stuname + ", sex=" + sex + ", mess=" + mess
-				+ ", password=" + password + ", birthday=" + birthday + "]";
+		return "Student [id=" + id + ", stuid=" + stuid + ", stuname=" + stuname + ", sex=" + sex + ", message="
+				+ message + ", password=" + password + ", birthday=" + birthday + "]";
 	}
 }

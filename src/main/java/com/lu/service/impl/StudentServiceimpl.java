@@ -3,6 +3,7 @@ package com.lu.service.impl;
 import java.util.List;
 
 import com.lu.dao.StudentDao;
+import com.lu.dao.impl.StudentDaoimpl;
 import com.lu.domain.Student;
 import com.lu.service.StudentService;
 /**
@@ -11,7 +12,7 @@ import com.lu.service.StudentService;
  *
  */
 public class StudentServiceimpl implements StudentService{
-	private StudentDao studentDao=new StudentDao();
+	private StudentDao studentDao=new StudentDaoimpl();
 	/**
 	 * 学生登陆
 	 */
@@ -33,5 +34,4 @@ public class StudentServiceimpl implements StudentService{
 			return true;
 		}
 	}
-	
 }

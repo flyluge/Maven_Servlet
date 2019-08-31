@@ -1,9 +1,7 @@
 package com.lu.utils;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -11,18 +9,18 @@ import javax.sql.DataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
 /**
-  *  数据库连接工具类
+ * 数据库连接工具类
  * @author Luge
  *
  */
 public class JDBCUtils {
 	private static DataSource dataSource;
+	public static ThreadLocal<Connection> threadLocal=new ThreadLocal<Connection>();
 	/**
 	 * 初始化数据源
 	 */
 	static {
 		try {
-			System.out.println("执行了");
 			Properties properties =new Properties();
 			properties.load(JDBCUtils.class.getClassLoader().getResourceAsStream("jdbc.properties"));
 			dataSource=DruidDataSourceFactory.createDataSource(properties);
@@ -31,74 +29,36 @@ public class JDBCUtils {
 		}
 	}
 	/**
-	 *  普通方式获取链接
-	 * @return Connection对象
-	 */
-	public static Connection getConnection() {
-		try {
-			//加载配置文件
-			Properties p=new Properties();
-			p.load(JDBCUtils.class.getClassLoader().getResourceAsStream("jdbc.properties"));
-			//配置相关内容
-			Class.forName(p.getProperty("driverClassName"));
-			String name=p.getProperty("username");
-			String password=p.getProperty("password");
-			String url=p.getProperty("url");
-			//获取Connection连接
-			return DriverManager.getConnection(url,name,password);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	/**
 	  *  关闭连接
 	 * @param connection Connection对象
 	 * @param preparedStatement PreparedStatement对象
 	 * @param resultSet ResultSet对象
 	 */
-	public static void close(Connection connection,PreparedStatement preparedStatement,ResultSet resultSet) {
+	public static void closeConnection(Connection conn) {
 		try {
-			if(resultSet!=null) {
-				resultSet.close();
-			}
-			if(preparedStatement!=null) {
-				preparedStatement.close();
-			}
-			if(connection!=null) {
-				connection.close();
-			}
-			resultSet=null;
-			preparedStatement=null;
-			connection=null;
-		}catch(Exception e) {
+			//关闭连接
+			conn.close();
+			//释放当前线程绑定
+			threadLocal.remove();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	/**
-	  *  从Druid数据库连接池中获取Connection对象
+	 *  从Druid数据库连接池中绑定当前线程的Connection对象
 	 * @return Connection对象
 	 */
 	public static Connection getDruidConnection() {
-		try {
-			//创建并配置数据源
-			//Properties p=new Properties();
-			//p.load(JDBCUtils.class.getClassLoader().getResourceAsStream("jdbc.properties"));
-			/*
-			 *  //手写方式
-			 * DruidDataSource dds=new DruidDataSource(); dds.setUrl(p.getProperty("url"));
-			 * dds.setUsername(p.getProperty("username"));
-			 * dds.setPassword(p.getProperty("password"));
-			 * dds.setDriverClassName(p.getProperty("driverClassName"));
-			 */
-			//调用配置文件方式
-			//DruidDataSource dds=(DruidDataSource) DruidDataSourceFactory.createDataSource(p);
-			//dds.setInitialSize(5);//初始化池子大小
-			return dataSource.getConnection();
-		} catch (Exception e) {
-			e.printStackTrace();
+		Connection conn=threadLocal.get();
+		if(conn==null) {
+			try {
+				conn=dataSource.getConnection();
+				threadLocal.set(conn);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		return null;
+		return conn;
 	}
 	/**
 	 * 获取数据源 
@@ -106,5 +66,31 @@ public class JDBCUtils {
 	 */
 	public static DataSource getDataSource() {
 		return dataSource;
+	}
+	/**
+	 * 开启事务
+	 * 获取当前线程的连接并关闭自动提交
+	 * @throws SQLException
+	 */
+	public static void startTransaction() throws SQLException {
+		getDruidConnection().setAutoCommit(false);
+	}
+	/**
+	 * 提交事务
+	 * @throws SQLException 
+	 */
+	public static void commitTransaction() throws SQLException {
+		Connection conn = getDruidConnection();
+		conn.commit();
+		closeConnection(conn);
+	}
+	/**
+	 * 回滚事务
+	 * @throws SQLException
+	 */
+	public static void rollBackTransaction() throws SQLException {
+		Connection conn = getDruidConnection();
+		conn.rollback();
+		closeConnection(conn);
 	}
 }
