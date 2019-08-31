@@ -15,6 +15,7 @@ import com.alibaba.druid.pool.DruidDataSourceFactory;
  */
 public class JDBCUtils {
 	private static DataSource dataSource;
+	//绑定当前线程的Conncetion
 	public static ThreadLocal<Connection> threadLocal=new ThreadLocal<Connection>();
 	/**
 	 * 初始化数据源
